@@ -6,11 +6,9 @@ public class PutFood : MonoBehaviour
 {
     public GameObject foodPrefab;
     public int numberOfFood = 100;
-    public Vector2 spawnArea = new Vector2(5, 5);
-    public float spawnAreaRadius = 3f;
+    public Vector2 spawnArea = new Vector2(2, 0);
+    public float spawnAreaRadius = 0.5f;
 
-
-    // Start is called before the first frame update
     void Start()
     {
         SpawnFood();
@@ -20,16 +18,11 @@ public class PutFood : MonoBehaviour
     {
         for (int i = 0; i < numberOfFood; i++)
         {
-            // Generar una posición aleatoria dentro del círculo
             Vector2 randomPos = RandomPointInCircle(spawnAreaRadius) + spawnArea;
-
-            // Instanciar el prefab de comida en la posición aleatoria
-            Instantiate(foodPrefab, randomPos, Quaternion.identity);
-
-            
+            Instantiate(foodPrefab, randomPos, Quaternion.identity, this.transform);
         }
     }
-    // Función para obtener una posición aleatoria dentro de un círculo
+ 
     Vector2 RandomPointInCircle(float radius)
     {
         float angle = Random.Range(0f, Mathf.PI * 2);
