@@ -1,0 +1,29 @@
+{
+    "MoveToFood": {
+        "checkpoints": [
+            {
+                "steps": 59000,
+                "file_path": "results\\ppo\\MoveToFood\\MoveToFood-59000.onnx",
+                "reward": null,
+                "creation_time": 1731010712.327186,
+                "auxillary_file_paths": [
+                    "results\\ppo\\MoveToFood\\MoveToFood-59000.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 59000,
+            "file_path": "results\\ppo\\MoveToFood.onnx",
+            "reward": null,
+            "creation_time": 1731010712.327186,
+            "auxillary_file_paths": [
+                "results\\ppo\\MoveToFood\\MoveToFood-59000.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.5.1+cu121"
+    }
+}
