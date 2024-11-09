@@ -1,23 +1,23 @@
 {
-    "MoveToFood": {
+    "AntAgent": {
         "checkpoints": [
             {
-                "steps": 59000,
-                "file_path": "results\\ppo\\MoveToFood\\MoveToFood-59000.onnx",
-                "reward": null,
-                "creation_time": 1731010712.327186,
+                "steps": 84488,
+                "file_path": "results\\ppo\\AntAgent\\AntAgent-84488.onnx",
+                "reward": 15.0,
+                "creation_time": 1731118691.9727027,
                 "auxillary_file_paths": [
-                    "results\\ppo\\MoveToFood\\MoveToFood-59000.pt"
+                    "results\\ppo\\AntAgent\\AntAgent-84488.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 59000,
-            "file_path": "results\\ppo\\MoveToFood.onnx",
-            "reward": null,
-            "creation_time": 1731010712.327186,
+            "steps": 84488,
+            "file_path": "results\\ppo\\AntAgent.onnx",
+            "reward": 15.0,
+            "creation_time": 1731118691.9727027,
             "auxillary_file_paths": [
-                "results\\ppo\\MoveToFood\\MoveToFood-59000.pt"
+                "results\\ppo\\AntAgent\\AntAgent-84488.pt"
             ]
         }
     },
