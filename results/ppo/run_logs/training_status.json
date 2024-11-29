@@ -2,22 +2,31 @@
     "AntAgent": {
         "checkpoints": [
             {
-                "steps": 84488,
-                "file_path": "results\\ppo\\AntAgent\\AntAgent-84488.onnx",
-                "reward": 15.0,
-                "creation_time": 1731118691.9727027,
+                "steps": 499996,
+                "file_path": "results\\ppo\\AntAgent\\AntAgent-499996.onnx",
+                "reward": 4.98,
+                "creation_time": 1732854574.9856918,
                 "auxillary_file_paths": [
-                    "results\\ppo\\AntAgent\\AntAgent-84488.pt"
+                    "results\\ppo\\AntAgent\\AntAgent-499996.pt"
+                ]
+            },
+            {
+                "steps": 500060,
+                "file_path": "results\\ppo\\AntAgent\\AntAgent-500060.onnx",
+                "reward": 4.98,
+                "creation_time": 1732854575.0578597,
+                "auxillary_file_paths": [
+                    "results\\ppo\\AntAgent\\AntAgent-500060.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 84488,
+            "steps": 500060,
             "file_path": "results\\ppo\\AntAgent.onnx",
-            "reward": 15.0,
-            "creation_time": 1731118691.9727027,
+            "reward": 4.98,
+            "creation_time": 1732854575.0578597,
             "auxillary_file_paths": [
-                "results\\ppo\\AntAgent\\AntAgent-84488.pt"
+                "results\\ppo\\AntAgent\\AntAgent-500060.pt"
             ]
         }
     },

@@ -8,6 +8,7 @@ TagManager:
   - Nest
   - Wall
   - Obstacle
+  - Pheromone
   layers:
   - Default
   - TransparentFX
