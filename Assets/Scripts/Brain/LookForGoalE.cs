@@ -3,11 +3,15 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 
-public class LookForGoal : Agent
+public class LookForGoalE : Agent
 {
+    [SerializeField] private Color win;
+    [SerializeField] private Color lose;
+    [SerializeField] private SpriteRenderer floorRenderer;
     public float moveSpeed = 0.5f; // Velocidad al avanzar
     public float rotationSpeed = 200f; // Velocidad al rotar
     private Rigidbody2D rb;
+    public Transform target;
 
     public override void Initialize()
     {
@@ -16,10 +20,10 @@ public class LookForGoal : Agent
 
     public override void OnEpisodeBegin()
     {
-        // Reestablece la posición del agente y el objetivo
-        transform.localPosition = new Vector3(Random.Range(-4f, 8f), Random.Range(-3f, 2f), 0f);
-        transform.rotation = Quaternion.Euler(0, 0, Random.Range(0, 360)); 
-        
+        // Reinicia la posición y rotación del agente
+        transform.localPosition = new Vector3(Random.Range(-0.15f, 1.5f), Random.Range(-0.7f, 0.3f), 0f);
+        transform.localRotation = Quaternion.Euler(0, 0, Random.Range(0, 360)); // Rotación aleatoria
+        target.localPosition = new Vector3(Random.Range(-0.15f, 1.5f), Random.Range(-0.7f, 0.3f), 0);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
@@ -38,6 +42,12 @@ public class LookForGoal : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
+        // Observa la posición relativa al objetivo
+        Vector2 relativePosition = target.localPosition - transform.localPosition;
+        sensor.AddObservation(relativePosition.x);
+        sensor.AddObservation(relativePosition.y);
+
+        // Observa la dirección actual del agente
         sensor.AddObservation(transform.up.x);
         sensor.AddObservation(transform.up.y);
     }
@@ -60,8 +70,21 @@ public class LookForGoal : Agent
         // Recompensa si alcanza el objetivo
         if (collision.CompareTag("Food") || collision.CompareTag("Pheromone"))
         {
+            floorRenderer.color = win;
             SetReward(5.0f);
             EndEpisode();
         }
     }
+
+
+    void OnCollisionStay2D(Collision2D other)
+    {
+        // Penaliza colisiones con paredes u obstáculos
+        if (other.collider.TryGetComponent<Wall>(out Wall wall) || other.collider.TryGetComponent<Obstacle>(out Obstacle obstacle))
+        {
+            AddReward(-1f);
+            floorRenderer.color = lose;
+        }
+    }
 }
+

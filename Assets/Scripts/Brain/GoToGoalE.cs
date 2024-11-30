@@ -7,7 +7,8 @@ using Unity.MLAgents.Actuators;
 
 public class GoToGoalE : Agent
 {
-    public float moveSpeed = 1f;
+    public float moveSpeed = 0.5f;
+    public float rotationSpeed = 200f;
 
     //This is just for training
     [SerializeField] private Color win;
@@ -22,7 +23,10 @@ public class GoToGoalE : Agent
     }
 
     public override void OnEpisodeBegin(){   
-        
+        // Reinicia la posición y rotación del agente
+        transform.localPosition = new Vector3(Random.Range(-0.15f, 1.5f), Random.Range(-0.7f, 0.3f), 0f);
+        transform.localRotation = Quaternion.Euler(0, 0, Random.Range(0, 360)); // Rotación aleatoria
+        target.localPosition = new Vector3(Random.Range(-0.15f, 1.5f), Random.Range(-0.7f, 0.3f), 0);
     }
 
     public override void OnActionReceived(ActionBuffers actions){
@@ -71,6 +75,9 @@ public class GoToGoalE : Agent
             
         }
     }
+
+
+
     
 
 }

@@ -345,16 +345,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 2
+    VectorObservationSize: 4
     NumStackedVectorObservations: 1
     m_ActionSpec:
-      m_NumContinuousActions: 2
-      BranchSizes: 
-    VectorActionSize: 02000000
+      m_NumContinuousActions: 1
+      BranchSizes: 03000000
+    VectorActionSize: 
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: cc6b50c79da18344ca776a9efcd14ade, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: AntAgent
@@ -393,6 +393,7 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 10000
   moveSpeed: 0.5
+  rotationSpeed: 200
   win: {r: 0.09507591, g: 0.6792453, b: 0.016019935, a: 1}
   lose: {r: 0.754717, g: 0.0035599943, b: 0.0035599943, a: 1}
   floorRenderer: {fileID: 4597637601457902247}
