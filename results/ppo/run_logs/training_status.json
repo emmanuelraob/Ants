@@ -2,31 +2,31 @@
     "AntAgent": {
         "checkpoints": [
             {
-                "steps": 499994,
-                "file_path": "results\\ppo\\AntAgent\\AntAgent-499994.onnx",
-                "reward": 4.166666666666667,
-                "creation_time": 1732993552.9839494,
+                "steps": 499995,
+                "file_path": "results\\ppo\\AntAgent\\AntAgent-499995.onnx",
+                "reward": 0.9797775530839231,
+                "creation_time": 1733003074.0492616,
                 "auxillary_file_paths": [
-                    "results\\ppo\\AntAgent\\AntAgent-499994.pt"
+                    "results\\ppo\\AntAgent\\AntAgent-499995.pt"
                 ]
             },
             {
-                "steps": 500058,
-                "file_path": "results\\ppo\\AntAgent\\AntAgent-500058.onnx",
-                "reward": 4.166666666666667,
-                "creation_time": 1732993553.042561,
+                "steps": 500002,
+                "file_path": "results\\ppo\\AntAgent\\AntAgent-500002.onnx",
+                "reward": 0.9797979797979798,
+                "creation_time": 1733003074.1019392,
                 "auxillary_file_paths": [
-                    "results\\ppo\\AntAgent\\AntAgent-500058.pt"
+                    "results\\ppo\\AntAgent\\AntAgent-500002.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 500058,
+            "steps": 500002,
             "file_path": "results\\ppo\\AntAgent.onnx",
-            "reward": 4.166666666666667,
-            "creation_time": 1732993553.042561,
+            "reward": 0.9797979797979798,
+            "creation_time": 1733003074.1019392,
             "auxillary_file_paths": [
-                "results\\ppo\\AntAgent\\AntAgent-500058.pt"
+                "results\\ppo\\AntAgent\\AntAgent-500002.pt"
             ]
         }
     },

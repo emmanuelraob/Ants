@@ -60,8 +60,15 @@ public class LookForGoal : Agent
         // Recompensa si alcanza el objetivo
         if (collision.CompareTag("Food") || collision.CompareTag("Pheromone"))
         {
-            SetReward(5.0f);
+            SetReward(100.0f);
             EndEpisode();
+        }
+    }
+    void OnCollisionStay2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Wall") || other.gameObject.CompareTag("Obstacle"))
+        {
+            AddReward(-1f);
         }
     }
 }
