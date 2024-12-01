@@ -29,7 +29,10 @@ public class FoodSpawner : MonoBehaviour
         Vector2 randomPosition = (Vector2)transform.position + Random.insideUnitCircle * spawnRadius;
 
         // Instancia el prefab en la posición generada
-        Instantiate(foodPrefab, randomPosition, Quaternion.identity);
+        GameObject food = Instantiate(foodPrefab, randomPosition, Quaternion.identity);
+        
+
+        
     }
 
     private void OnDrawGizmos()

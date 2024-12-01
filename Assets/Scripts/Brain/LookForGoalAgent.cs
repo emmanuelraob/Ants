@@ -3,27 +3,35 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 
-public class LookForGoalE : Agent
+public class LookForGoalAgent : Agent
 {
-    [SerializeField] private Color win;
-    [SerializeField] private Color lose;
-    [SerializeField] private SpriteRenderer floorRenderer;
-    public float moveSpeed = 0.5f; // Velocidad al avanzar
+    public float moveSpeed = 1f; // Velocidad al avanzar
     public float rotationSpeed = 200f; // Velocidad al rotar
     private Rigidbody2D rb;
-    public Transform target;
+    private Brain brain;
 
     public override void Initialize()
     {
         rb = GetComponent<Rigidbody2D>();
+        brain = transform.parent.GetComponent<Brain>();
+        if (brain != null)
+        {
+            brain.OnTransformUpdated += OnParentTransformUpdated;
+        }
     }
 
     public override void OnEpisodeBegin()
     {
         // Reinicia la posición y rotación del agente
-        transform.localPosition = new Vector3(Random.Range(-0.15f, 1.5f), Random.Range(-0.7f, 0.3f), 0f);
-        transform.localRotation = Quaternion.Euler(0, 0, Random.Range(0, 360)); // Rotación aleatoria
-        target.localPosition = new Vector3(Random.Range(-0.15f, 1.5f), Random.Range(-0.7f, 0.3f), 0);
+        // Si existe anterior se usa esa posicion y rotacion
+        if (brain != null){
+            transform.localPosition = brain.GetPosition();
+            transform.localRotation = brain.GetRotation();
+        }
+        else {
+            transform.localPosition = transform.parent.localPosition; // Posición del padre del agente
+            transform.localRotation = Quaternion.Euler(0, 0, Random.Range(0, 360)); // Rotación aleatoria
+        }
     }
 
     public override void OnActionReceived(ActionBuffers actions)
@@ -38,15 +46,15 @@ public class LookForGoalE : Agent
         {
             rb.MovePosition(rb.position + (Vector2)transform.up * moveSpeed * Time.deltaTime);
         }
+
+        // Notifica al padre de la nueva posición y rotación
+        if (brain != null){
+            brain.UpdateTransform(transform.localPosition, transform.localRotation);
+        }
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        // Observa la posición relativa al objetivo
-        Vector2 relativePosition = target.localPosition - transform.localPosition;
-        sensor.AddObservation(relativePosition.x);
-        sensor.AddObservation(relativePosition.y);
-
         // Observa la dirección actual del agente
         sensor.AddObservation(transform.up.x);
         sensor.AddObservation(transform.up.y);
@@ -64,27 +72,23 @@ public class LookForGoalE : Agent
         // Avance: W
         discreteActionsOut[0] = Input.GetKey(KeyCode.W) ? 1 : 0;
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnParentTransformUpdated(Vector3 position, Quaternion rotation)
     {
-        // Recompensa si alcanza el objetivo
-        if (collision.CompareTag("Food") || collision.CompareTag("Pheromone"))
+        // Actualiza la posición y rotación si el padre cambia
+        transform.position = position;
+        transform.rotation = rotation;
+    }
+    void OnDestroy()
+    {
+        if (brain != null)
         {
-            floorRenderer.color = win;
-            SetReward(5.0f);
-            EndEpisode();
+            brain.OnTransformUpdated -= OnParentTransformUpdated;
         }
     }
 
-
-    void OnCollisionStay2D(Collision2D other)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        // Penaliza colisiones con paredes u obstáculos
-        if (other.collider.TryGetComponent<Wall>(out Wall wall) || other.collider.TryGetComponent<Obstacle>(out Obstacle obstacle))
-        {
-            AddReward(-1f);
-            floorRenderer.color = lose;
-        }
+        Debug.Log("Collision with " + collision.gameObject.name);
     }
 }
 
