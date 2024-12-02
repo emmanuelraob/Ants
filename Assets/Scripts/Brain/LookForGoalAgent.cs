@@ -88,7 +88,18 @@ public class LookForGoalAgent : Agent
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Collision with " + collision.gameObject.name);
+        if (brain != null)
+        {
+            brain.NotifyCollision(collision, this);
+        }
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (brain != null)
+        {
+            brain.NotifyCollision(collision.collider, this);
+        }
+    }
+
 }
 

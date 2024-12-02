@@ -10,7 +10,7 @@ public class GoToGoalAgent : Agent
     public float moveSpeed = 1f;
     public float rotationSpeed = 200f;
 
-    private Transform target;
+    public Transform target;
     private Rigidbody2D rb;
     private Brain brain;
 
@@ -88,25 +88,19 @@ public class GoToGoalAgent : Agent
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if ((collision.collider.TryGetComponent<Wall>(out Wall wall)) || (collision.collider.TryGetComponent<Obstacle>(out Obstacle obstacle))){
-            AddReward(-1f);
-            EndEpisode();
+        if ( brain != null)
+        {
+            brain.NotifyCollision(collision.collider, this);
         }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         
-        if (other.TryGetComponent<Food>(out Food food))
+        if (brain != null)
         {
-            SetReward(1f);
-            EndEpisode();
-            
+            brain.NotifyCollision(other, this);
         }
     }
-
-
-
-    
 
 }
