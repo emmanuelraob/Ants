@@ -9,6 +9,7 @@ TagManager:
   - Wall
   - Obstacle
   - Pheromone
+  - FalseFood
   layers:
   - Default
   - TransparentFX

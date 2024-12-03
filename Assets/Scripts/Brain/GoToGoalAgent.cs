@@ -102,4 +102,9 @@ public class GoToGoalAgent : Agent
             brain.NotifyCollision(other, this);
         }
     }
+
+    void OnCollisionStay(Collision other)
+    {
+        Debug.Log("Colisionando con " + other.gameObject.name);
+    }
 }

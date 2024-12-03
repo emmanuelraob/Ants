@@ -98,7 +98,7 @@ CircleCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -135,4 +135,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextNode: {fileID: 0}
   prevNode: {fileID: 0}
+  nest: {fileID: 0}
   level: 0
+  isValid: 0

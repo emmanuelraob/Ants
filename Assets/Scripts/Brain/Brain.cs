@@ -19,9 +19,9 @@ public class Brain : Agent
 
     //evento para controlar la actualización de la posición de los agentes
     public event Action<Vector3, Quaternion, float> OnTransformUpdated;
-    private Vector3 currentPosition;
-    private Quaternion currentRotation;
-    private float currentVelocity;
+    public Vector3 currentPosition;
+    public Quaternion currentRotation;
+    public float currentVelocity;
 
     //Agentes
     [SerializeField] public GoToGoalAgent GoToGoalAgent;
@@ -32,13 +32,13 @@ public class Brain : Agent
 
 
     //Objetivo si es necesario
-    [SerializeField] public Transform target;
+    [SerializeField] public GameObject target;
 
     //Todo lo que tiene que ver con pheromones
     [SerializeField] public Pheromone pheromonePrefab;
     public Pheromone lastPheromone; // se va a usar como referencia para realizar la lista de pheromones
     [SerializeField] public Nest nest;
-    private bool posibleToPutPheromone;
+    public bool posibleToPutPheromone;
 
     //Collider 
     public event Action<Collider2D, GameObject> OnChildCollision;
@@ -51,14 +51,14 @@ public class Brain : Agent
 
 
     //Variables para la decision de la ia 
-    private float hunger; 
-    private float maxHunger; 
-    private float life; 
-    private float lifeSpan; 
-    private float weight;
-    private float foodWeight;
-    private float tireness;
-    private float maxTireness;
+    public float hunger; 
+    public float maxHunger; 
+    public float life; 
+    public float lifeSpan; 
+    public float weight;
+    public float foodWeight;
+    public float tireness;
+    public float maxTireness;
     //el transform del nido
     //la posicion de la hormiga 
     //la rotacion de la hormiga
@@ -79,7 +79,7 @@ public class Brain : Agent
         foodWeight = 1f;
         tireness = 0f;
         maxTireness = 100f;
-        currentRotation = Quaternion.Euler(0, 0, UnityRandom.Range(0, 360));
+        currentRotation = Quaternion.Euler(0, 0, UnityEngine.Random.Range(0, 360));
     }
 
     public void UpdateTransform(Vector3 position, Quaternion rotation, float velocity)
@@ -157,18 +157,19 @@ public class Brain : Agent
         switch (currentState)
         {
             case AntState.GoToGoal:
-                if (!GoToGoalAgent.gameObject.activeSelf)
+                if (!GoToGoalAgent.gameObject.activeSelf && target != null) 
                 {
                     DeactiveAllAgents();
                     GoToGoalAgent.gameObject.SetActive(true);
-                    GoToGoalAgent.SetTarget(target);
+                    GoToGoalAgent.SetTarget(target.transform);
                     GoToGoalAgent.gameObject.SetActive(false);
                     GoToGoalAgent.gameObject.SetActive(true);
                     posibleToPutPheromone = false;
                 }
                 if (target != null)
                 {
-                    GoToGoalAgent.SetTarget(target);
+                    AddReward(-1f);
+                    GoToGoalAgent.SetTarget(target.transform);
                     posibleToPutPheromone = false;
                 }
                 else {
@@ -195,14 +196,15 @@ public class Brain : Agent
                 {
                     DeactiveAllAgents();
                     GoToGoalAgent.gameObject.SetActive(true);
-                    GoToGoalAgent.SetTarget(target);
+                    GoToGoalAgent.SetTarget(target.transform);
                     GoToGoalAgent.gameObject.SetActive(false);
                     GoToGoalAgent.gameObject.SetActive(true);
                     posibleToPutPheromone = false;
                 }
                 if (target != null)
                 {
-                    GoToGoalAgent.SetTarget(target);
+                    AddReward(-1f);
+                    GoToGoalAgent.SetTarget(target.transform);
                     posibleToPutPheromone = false;
                 }
                 else {
@@ -221,14 +223,15 @@ public class Brain : Agent
                 {
                     DeactiveAllAgents();
                     GoToGoalAgent.gameObject.SetActive(true);
-                    GoToGoalAgent.SetTarget(target);
+                    GoToGoalAgent.SetTarget(target.transform);
                     GoToGoalAgent.gameObject.SetActive(false);
                     GoToGoalAgent.gameObject.SetActive(true);
                     posibleToPutPheromone = false;
                 }
                 if (target != null)
                 {
-                    GoToGoalAgent.SetTarget(target);
+                    AddReward(-1f);
+                    GoToGoalAgent.SetTarget(target.transform);
                     posibleToPutPheromone = false;
                 }
                 else {
@@ -322,6 +325,7 @@ public class Brain : Agent
             {
                 Debug.Log("Wall or obstacle");
                 currentState = AntState.AvoidObstacle;
+                AddReward(-1f);
             }
 
             // En caso de ser comida
@@ -332,10 +336,11 @@ public class Brain : Agent
                     if (lastPheromone != null)
                     {
                         lastPheromone.SetAllValid();
-                        target = lastPheromone.transform;
+                        target = lastPheromone.gameObject;
                     }
                     SetCarringFoodTrue();
                     currentState = AntState.ReturnToNest;
+                    AddReward(100f);
                 }
             }
 
@@ -344,13 +349,20 @@ public class Brain : Agent
             {
                 Debug.Log("Nest");
                 //setear las variables necesarias
+                if (carringFood) {
+                    AddReward(100f);
+                    nest.createAnt();
+                }else {
+                    AddReward(-20f);
+                }
                 SetCarringFoodFalse();
+                
                 hunger = 0f;
                 tireness = 0f;
                 //posibilidad 1, ir hacia la comida 
                 if (lastPheromone != null && Vector2.Distance(lastPheromone.transform.position, currentPosition) < 2.5f)
                 {
-                    target = lastPheromone.transform;
+                    target = lastPheromone.gameObject;
                     currentState = AntState.GoingForFood;
                 }
                 //posibilidad 2, ir a buscar comida
@@ -364,13 +376,13 @@ public class Brain : Agent
             {
                 GameObject obj = collider.gameObject;
                 bool isValid = pheromone.isValid;
-
+                pheromone.UpdateLevel();
                 if (isValid && (currentState == AntState.GoingForFood || currentState == AntState.LookForGoal))
                 {
                     // Decide si recorrer hacia donde está la comida
                     if (pheromone.nextNode != null)
                     {
-                        target = pheromone.nextNode.transform;
+                        target = pheromone.nextNode.gameObject;
                         currentState = AntState.GoingForFood;
                     }
                     else
@@ -378,6 +390,7 @@ public class Brain : Agent
                         target = null;
                     }
                     lastPheromone = pheromone;
+                    AddReward(1f);
                 }
                 // Posibilidad 2: Ir al nest
                 else if (currentState == AntState.ReturnToNest)
@@ -385,24 +398,25 @@ public class Brain : Agent
                     // Si choca con una hormona con prevNode, se le asigna el target
                     if (pheromone.prevNode != null)
                     {
-                        target = pheromone.prevNode.transform;
+                        target = pheromone.prevNode.gameObject;
                     }
                     // Si no hay prevNode, intenta asignar el nest
                     else if (pheromone.nest != null)
                     {
-                        target = pheromone.nest.transform;
+                        target = pheromone.nest.gameObject;
                     }
                     else
                     {
                         float distance = Vector2.Distance(currentPosition, nest.transform.position);
                         if (distance < 2f){
-                            target = nest.transform;
+                            target = nest.gameObject;
                         }
                         else {
                             target = null;
                         }
                     }
                     lastPheromone = pheromone;
+                    AddReward(1f);
                 }
             }
 
@@ -415,5 +429,4 @@ public class Brain : Agent
             }
         }
     }
-
 }

@@ -70,10 +70,4 @@ public class Pheromone : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    private void OntriggerEnter2D(Collider2D other)
-    {    
-        if (other.gameObject.tag == "Player"){
-            UpdateLevel();
-        }
-    }
 }
