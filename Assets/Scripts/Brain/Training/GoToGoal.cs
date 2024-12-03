@@ -66,7 +66,7 @@ public class GoToGoal : Agent
     void OnTriggerEnter2D(Collider2D other)
     {
         
-        if (other.TryGetComponent<Food>(out Food food))
+        if (other.CompareTag("Food"))
         {
             SetReward(1f);
             floorRenderer.color = win;

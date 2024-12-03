@@ -65,6 +65,8 @@ public class Pheromone : MonoBehaviour
             {
                 prevNode.SetNextNode(null);
             }
+            nextNode = null;
+            prevNode = null;
             Destroy(gameObject);
         }
     }

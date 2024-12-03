@@ -7,7 +7,7 @@ using Unity.MLAgents.Actuators;
 
 public class GoToGoalAgent : Agent
 {
-    public float moveSpeed = 1f;
+    private float moveSpeed = 1f;
     public float rotationSpeed = 200f;
 
     public Transform target;
@@ -43,8 +43,7 @@ public class GoToGoalAgent : Agent
         float moveX = actions.ContinuousActions[0];
         float moveY = actions.ContinuousActions[1];
 
-        rb.MovePosition(transform.position + new Vector3(moveX, moveY, 0f) * moveSpeed * Time.deltaTime);
-
+        rb.MovePosition(rb.position + new Vector2(moveX, moveY) * moveSpeed * Time.deltaTime);
         // Rotate the ant
         if (moveX != 0 || moveY != 0)
         {
@@ -54,7 +53,8 @@ public class GoToGoalAgent : Agent
         
         // Notifica al padre de la nueva posición y rotación
         if (brain != null){
-            brain.UpdateTransform(transform.localPosition, transform.localRotation);
+            float magnitude = (new Vector3(moveX, moveY, 0f) * moveSpeed).magnitude;
+            brain.UpdateTransform(transform.localPosition, transform.localRotation, magnitude);
         }
     }
 
@@ -70,7 +70,7 @@ public class GoToGoalAgent : Agent
         continuousActionsOut[0] = Input.GetAxis("Horizontal"); // X-axis movement
         continuousActionsOut[1] = Input.GetAxis("Vertical");   // Y-axis movement
     }
-    private void OnParentTransformUpdated(Vector3 position, Quaternion rotation)
+    private void OnParentTransformUpdated(Vector3 position, Quaternion rotation, float velocity)
     {
         // Actualiza la posición y rotación si el padre cambia
         transform.position = position;
@@ -102,5 +102,4 @@ public class GoToGoalAgent : Agent
             brain.NotifyCollision(other, this);
         }
     }
-
 }
